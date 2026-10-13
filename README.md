@@ -1,4 +1,4 @@
-# FloydIA Autonomous Agent Skills Catalog (v28-MEM)
+# FloydIA Autonomous Agent Skills Catalog (v28-MEM, rev. 2026-10-13)
 
 A production-grade, deterministic agentic skills ecosystem designed for autonomous coding environments, multi-model harnesses, homelab orchestration, and evidence-based verification.
 
@@ -6,19 +6,11 @@ A production-grade, deterministic agentic skills ecosystem designed for autonomo
 
 The FloydIA Agent OS organizes execution, verification, and governance into modular skills:
 
-- **Governor & Routing**: , , , .
-- **Deep Research & Intelligence**:  (with 5-engine consensus swarm), .
-- **System Reliability Engineering (SRE)**: , , , .
-- **External Collaboration**:  (eyes and hands protocol for external reasoning models).
+- **Governor & Routing**: `f-harness` v4 (unified: SRE operations + mode selector + workflow methodology, with `references/` progressive disclosure), `f-orquestador-floydia` (architect), `f-mejora-prompt`, `f-menu-prompts`.
+- **Deep Research & Intelligence**: `f-investiga` (two modes: deep dive + swarm, referencing the canonical `ENJAMBRE_5_MOTORES_SSOT`), `f-opti-notebooklm`.
+- **System Reliability Engineering (SRE)**: `f-master-update`, `f-evidence-engine`, `f-handon-handoff`, `f-check-environment`.
 
-## 🐝 5-Engine Multi-Model Consensus Swarm
-
-Key skills incorporate concurrent cross-model triangulation at zero additional marginal cost:
-1. **Kimi K3**: Long-context architectural planning and reasoning.
-2. **DeepSeek-R1**: Deep mathematical and algorithmic formal verification.
-3. **Gemini Flash / V4 Flash**: High-throughput contextual analysis and synthesis.
-4. **Qwen 2.5 Coder**: Static code analysis and syntactic strictness.
-5. **Local Workspace Agent**: Ground truth local environment and AST state.
+> 2026-10-13 consolidation: merged `f-harness-select`/`f-harness-workflow` into `f-harness`; removed previously superseded skills (`f-router`, `f-harness-router`, `f-update-floydia`, `f-opti-floydia`) and archived ones (`f-policy-engine`, `f-audit-web`). Swarm engine definitions are SSOT-referenced, never embedded.
 
 ## 🛡️ Security & Privacy
 

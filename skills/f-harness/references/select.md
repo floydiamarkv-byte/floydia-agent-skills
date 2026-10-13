@@ -1,19 +1,3 @@
----
-name: f-harness-select
-description: "Selector interactivo Menu-First del modo/cadena de prioridades del Harness FloydIA (Kimi K3, AGY, V4 Flash/Pro, Pool Free). Muestra el modo activo verificado y permite conmutar entre los 5 modos predefinidos con confirmación y evidencia. USAR cuando el usuario invoque /f-harness-select, /harness, /modo, /harness-mode, /elegir-modelo, /prioridades, o pida cambiar el orden/prioridad de motores del harness. NO USAR para cambiar el default_model de la sesión DSH en curso (eso requiere editar settings.yaml y reiniciar sesión)."
-version: 1.0.0
-triggers:
-  - /f-harness-select
-  - /harness
-  - /modo
-  - /harness-mode
-  - /elegir-modelo
-  - /prioridades
-  - cambiar modo del harness
-  - cambiar orden de motores
-  - cambiar prioridad de modelos
-  - seleccionar motor
----
 
 # Skill: f-harness-select — Selector Menu-First del Modo de Harness v1.0
 
@@ -42,7 +26,7 @@ Al activarse el skill, el agente DEBE ejecutar estos pasos en orden:
 
 ### Paso 1 — Leer estado actual (verificación, no asunción)
 ```bash
-cat /SCRIPTS/harness_mode.json
+cat ${WORKSPACE}/SCRIPTS/harness_mode.json
 ```
 (extraer `mode` y `mode_name`; si no existe, asumir modo 2 = default)
 
@@ -82,13 +66,13 @@ Usar la herramienta de pregunta interactiva (`ask_user_question`) con las opcion
 ### Paso 4 — Aplicar la conmutación
 Si elige 1–5, ejecutar:
 ```bash
-bash /SCRIPTS/harness_mode.sh <N> < /dev/null
+bash ${WORKSPACE}/SCRIPTS/harness_mode.sh <N> < /dev/null
 ```
 
 ### Paso 5 — Verificación por evidencia (Protocolo v28)
 Nunca afirmar el cambio sin confirmarlo:
 ```bash
-cat /SCRIPTS/harness_mode.json
+cat ${WORKSPACE}/SCRIPTS/harness_mode.json
 ```
 Presentar al usuario el resultado: modo nuevo, `mode_name` y `updated_at` literales del JSON.
 

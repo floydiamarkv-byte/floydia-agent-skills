@@ -34,7 +34,7 @@ python3 SCRIPTS/evidence_engine.py --claim assertions --target "qa_summary.json"
 python3 SCRIPTS/evidence_engine.py --claim consensus --target "hipotesis_o_resultado.txt"
 ```
 
-> **Regla de Consenso del Enjambre**: Somete la hipótesis técnica a escrutinio simultáneo de los 5 motores (Kimi K3, DeepSeek-R1, Gemini 3.8 Flash, Qwen 2.5 Coder y AGY). El recibo se valida únicamente con mayoría calificada (≥4/5 votos afirmativos sin alucinaciones).
+> **Regla de Consenso del Enjambre**: la composición de motores y reglas de consenso NO se definen aquí (SSOT): leer `memory-bank/prompts/ENJAMBRE_5_MOTORES_SSOT.md`. El recibo se valida únicamente con mayoría calificada (≥4/5 votos afirmativos sin alucinaciones) sobre los motores vivos definidos en ese SSOT.
 
 ---
 

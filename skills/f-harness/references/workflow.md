@@ -1,16 +1,5 @@
----
-name: f-harness-workflow
-description: "Metodología de ingeniería de arneses (Harness Engineering): Planificación estructurada, roles desacoplados (Líder, Explorador, Implementador, Revisor) y verificación determinista 'Evidencia antes de Afirmar'. USAR cuando se desarrollen tareas complejas de arquitectura, refactors mayores o debugging profundo multi-agente. NO USAR para scripts triviales de una sola línea ni consultas informativas rápidas."
-version: 2.1.0
-triggers:
-  - /f-harness
-  - /f-harness-workflow
-  - /harness
-  - harness-workflow
-  - arnes agéntico
----
 
-# Skill: Metodología de Arneses Agénticos (`f-harness-workflow` v2.1)
+# Skill: Metodología de Arneses Agénticos (`f-harness-workflow` v2.2)
 ## Harness Engineering, Desacoplamiento de Roles & Verificación Determinista
 
 > **Propósito**: Proveer un marco sistemático para orquestar tareas de alta complejidad técnica mediante subagentes desacoplados, aislamiento de pruebas y certificación estricta por evidencia antes de afirmar.
@@ -42,6 +31,12 @@ Selecciona una acción respondiendo con el **número** correspondiente:
 
 5️⃣ **Consultar Matriz de Enrutamiento de Modelos**
    ↳ Muestra la asignación de modelos por tier (Trivial, Estándar, Arquitectura) en `SCRIPTS/model_router.md`.
+
+6️⃣ **Diagnóstico Rápido de Motores & Estado del Arnés**
+   ↳ Invoca `SCRIPTS/harness_doctor.py` para verificar que los modelos seleccionados para cada rol están vivos y el proxy responde antes de despachar subagentes.
+
+7️⃣ 🐝 **Auditoría con Enjambre Anclado & Falsabilidad Ejecutable**
+   ↳ Ejecuta deliberación multi-motor inyectando código con números de línea (`python3 SCRIPTS/harness_dispatch.py --swarm --file <ruta>`), exigiendo citas de líneas y oráculo ejecutable (tests de reproducción).
 
 0️⃣ **Salir**
 ```
@@ -83,6 +78,8 @@ graph LR
      1. Ruta del screenshot (`.png`) o salida de test inspeccionada.
      2. SHA256 criptográfico del artefacto.
      3. JSON de aserciones (`pass: true`).
+4. **Prueba de Humo Obligatoria en Mutaciones de Configuración**: Toda modificación en archivos de configuración (`settings.yaml`, `harness_mode.json`, servicios, pipelines) exige prueba de humo determinista inmediata (`dsh --dump-config`, `harness_doctor.py`, tests unitarios) antes de dar por cerrada la tarea.
+5. **Escritura Segura de Archivos (Anti-Volcado Masivo)**: Prohibido volcar archivos o documentos extensos (>15-20 KB o >300 líneas) en una sola llamada de herramienta (`write_to_file` con payloads gigantes). Para prevenir la saturación de buffers IPC/SSE y errores de stream interrumpido, los archivos largos deben generarse por partes incrementales, modificarse quirúrgicamente o escribirse mediante scripts locales directos en Python o Bash.
 
 ---
 
