@@ -1,5 +1,8 @@
 # FloydIA Autonomous Agent Skills Catalog (v28-MEM, rev. 2026-10-13)
 
+[![CI](https://github.com/floydiamarkv-byte/floydia-agent-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/floydiamarkv-byte/floydia-agent-skills/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A production-grade, deterministic agentic skills ecosystem designed for autonomous coding environments, multi-model harnesses, homelab orchestration, and evidence-based verification.
 
 ## 🏛️ Architecture Overview
