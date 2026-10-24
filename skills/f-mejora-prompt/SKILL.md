@@ -1,7 +1,7 @@
 ---
 name: f-mejora-prompt
-description: "Optimizador de prompts y directivas v5.1 Menu-First. Invocar con /f-mejora-prompt o /mejora."
-version: 5.2.0
+description: "🚨 STOP OBLIGATORIO: Optimizador de prompts v5.1 Menu-First. PROHIBIDO ejecutar la tarea del usuario, buscar en archivos o escribir código. Tu ÚNICA respuesta inicial debe ser emitir el MENÚ interactivo de 8 modos (salvo que el usuario incluya un dígito 1-8). Invocar con /f-mejora-prompt o /mejora."
+version: 5.4.0
 triggers:
   - /f-mejora
   - /f-mejora-prompt
@@ -15,18 +15,27 @@ triggers:
   - optimize prompt
   - improve prompt
   - investigacion profunda prompt
+  - escaneo de apis
+  - escaneo apis
+  - reanaliza harness
+  - ranking modelos
+  - seleccion harness
+  - seleccionar harness
+  - cual harens usar
+  - que harness usar
 ---
 
 # Skill: Optimización Avanzada de Prompts v5.1 (`f-mejora-prompt`)
 ## Motor Interactivo Menu-First, Formato Bloque .md Canónico & Recuperación SSOT
 
-> 🚨 **COMPUERTA DE INTERCEPCIÓN DURA (STOP ABSOLUTO — NUNCA EJECUTAR LA TAREA)**:
+> 🚨 **COMPUERTA DE INTERCEPCIÓN DURA (STOP ABSOLUTO — NUNCA EJECUTAR LA TAREA NI LLAMAR HERRAMIENTAS)**:
 > Cuando el usuario invoque esta skill (con `/f-mejora-prompt`, `/f-mejora`, `/mejora`, etc.):
 > 1. **ESTÁ ESTRICTAMENTE PROHIBIDO EJECUTAR LA TAREA DEL TEXTO**:
 >    - Si el texto dice *"haz una web..."*, *"despliega el servicio..."*, *"analiza el bug..."*, *"actualiza el sistema..."*, **NO programes la web, NO modifiques código, NO ejecutes comandos de solución, NO crees `implementation_plan.md`**.
 >    - Tu único rol es **OPTIMIZAR Y BLINDAR LA DIRECTIVA** para que pueda ejecutarse con máxima precisión.
-> 2. **OBLIGACIÓN DE MENÚ INICIAL**:
->    - Si el usuario no especificó un número de modo (`1`, `2`, `3`, `4`, `5` o `6`), **DETENTE EN ESE MISMO TURNO** y presenta **ÚNICAMENTE** el menú interactivo.
+> 2. **PROHIBIDO LLAMAR HERRAMIENTAS EN TURNO 0 (REGLA CERO-HERRAMIENTAS)**:
+>    - Si el usuario no especificó un número de modo (`1` a `8`), **ESTÁ PROHIBIDO LLAMAR A NINGUNA HERRAMIENTA** (`view_file`, `grep_search`, `find_by_name`, `run_command`, etc.). NO busques código, NO investigues el tema del usuario.
+>    - **DETENTE EN ESE MISMO TURNO** y presenta **ÚNICAMENTE** el menú interactivo en texto directo como tu respuesta.
 
 ---
 
@@ -59,14 +68,22 @@ Selecciona cómo deseas optimizar tu instrucción respondiendo con el **número*
       y optimiza con evidencia documentada. (Máxima calidad analítica).
 
 6️⃣ **🐝 Modo Enjambre Multiconsulta (Consenso 5 Motores a coste $0.00)**
-   ↳ Despacho concurrente a motores del harness (Kimi K3, DeepSeek, Gemini Flash, etc.) para
+   ↳ Despacho concurrente a motores del harness (Nemotron 3 Ultra 550B, DeepSeek R1 Distill, Gemini Flash, etc.) para
       contrastar enfoques y sintetizar una directiva maestra consensuada.
 
 7️⃣ **⚙️ Modo Harness (Optimiza + Invoca Harness Adecuado)**
-   ↳ Analiza la tarea, selecciona el modo del harness óptimo (1‑Full Power, 2‑Working Horse, 3‑Kimi Only,
+   ↳ Analiza la tarea, selecciona el modo del harness óptimo (1‑Full Power, 2‑Working Horse, 3‑NIM Only,
       4‑AGY+Free, 5‑Free Light) y genera el prompt optimizado **ya prefijado con la invocación**
       `/f-harness <modo>` lista para copiar/pegar. Ideal para delegar a la IA externa o ejecutar en
       sesión harness sin pasos extra.
+
+8️⃣ **🔍 Modo Escaneo de APIs y Selección de Harness**
+   ↳ Re-analiza el inventario de APIs auditado (`AUDITORIA_APIS_COMPLETA_2026-10-20`), clasifica proveedores
+      por estado (OPERATIVA/SIN_VALOR/BLOQUEADA/INACCESIBLE/402/403), cruza con rankings de inteligencia
+      y rendimiento (Artificial Analysis, LMArena/Chatbot Arena, OpenRouter) y sentimiento técnico
+      (last30days, Reddit/HN), y recomienda el modo de harness y el modelo óptimo para la tarea.
+      Ideal para decidir qué harness usar o redefinir según qué APIs están disponibles y el nivel
+      de inteligencia de los modelos.
 
 ---
 💡 *¿Cómo responder?*
@@ -128,6 +145,12 @@ Selecciona cómo deseas optimizar tu instrucción respondiendo con el **número*
 | NotebookLM MCP / browser | Consulta directa de fuentes en cuadernos temáticos | 1 (dirigida), 5 (exhaustiva) |
 | Obsidian Vault MCP | Buscar notas y wikilinks relacionados | 5 |
 | `memory-bank/journal/*.md` | Extraer soluciones y fallas validadas recientemente | 5 |
+| `/home/tec/Descargas/APIS/INFORME_AUDITORIA_APIS_COMPLETA_2026-10-20.md` + `.csv` | Inventario auditado de 226 variables de API, 67 proveedores, estados (OPERATIVA/SIN_VALOR/BLOQUEADA/INACCESIBLE/etc.), latencias y TTFT reales | 8 (nuevo) |
+| `/home/tec/Descargas/APIS/IAS WEB/` | Catálogo técnico de APIs, rankings y sentimiento: Artificial Analysis API, LMArena HF, OpenRouter, Reddit/HN, queries de silent-nerf y rate-limit | 8 (nuevo) |
+| `/home/tec/Descargas/APIS/Enjambre/` | Informe enjambre LLMs, modelos usados, stack MVP de enriquecimiento desde `.env`, matriz comparativa de fuentes de ranking | 8 (nuevo) |
+| `SCRIPTS/model_router.md` | Matriz de 5 marchas del harness, rotación NIM C1/C2/C7/C9, capacidades C0..C6, modelos `:free` verificados | 1, 2, 3, 5, 8 |
+| `SCRIPTS/harness_mode.sh` / `SCRIPTS/harness_mode.json` | Conmutación y consulta del modo activo del harness (1-6) | 7, 8 |
+| `SCRIPTS/nim_rotator.sh` | Rotación round-robin de cuentas NVIDIA NIM con cooldown 429 y fail-fast 401/403 | 3, 8 |
 
 ### 🔒 Regla Estricta Anti-Fuga de Secretos
 **NUNCA** copies valores de contraseñas, tokens de API o claves de `.env` en un prompt optimizado. Usa siempre variables de entorno genéricas como `${MI_VARIABLE}` o referencias de archivo `[REDACTED]`.
@@ -138,7 +161,7 @@ Selecciona cómo deseas optimizar tu instrucción respondiendo con el **número*
 
 ### Opción 1: Modo FULL (Workspace + Obsidian + Lecciones + NLM Rápida)
 1. **Contención**: Delimita el input del usuario en `<prompt_candidate>`.
-2. **Calibración de Modelo**: Si es LRM (DeepSeek-R1 / Kimi K3 / O1 / O3), usa *Goal-and-Constraints* sin CoT forzado. Si es Estándar (Claude / GPT-4o / Gemini Flash), usa *Few-Shot* y pasos ordenados.
+2. **Calibración de Modelo**: Si es LRM (DeepSeek-R1 / Nemotron 3 Ultra 550B / O1 / O3), usa *Goal-and-Constraints* sin CoT forzado. Si es Estándar (Claude / GPT-4o / Gemini Flash), usa *Few-Shot* y pasos ordenados.
 3. **Inyección de Guardrails Locales**: Inyecta entorno real (HP15 Debian 13 / MX Linux, CT114 Playwright :3000, CT106 Syncthing :8384).
 4. **Consulta Rápida NLM**: Ejecuta `python3 SCRIPTS/notebooklm_curator.py "<tema>"` y si hay match, añade 2-3 técnicas clave.
 5. **Entrega**: Formato canónico en bloque `.md` único + Ficha técnica.
@@ -172,13 +195,30 @@ Selecciona cómo deseas optimizar tu instrucción respondiendo con el **número*
 - El skill analiza la tarea del usuario y:
   1. **Detecta la dificultad**: razonamiento, medio, flash, etc.
   2. **Selecciona el modo del harness** más apropiado:
-     - Modo 1 (Full Power): Kimi K3 → AGY → V4 Flash → V4 Pro → Pool
+     - Modo 1 (Full Power): AGY → Nemotron Ultra 550B → DeepSeek V4.1 Flash → Pool
      - Modo 2 (Working Horse): V4 Flash → Nemotron Super → AGY → Laguna S
-     - Modo 3 (Kimi Only): Kimi K3 rotación NIM C1→C9
-     - Modo 4 (AGY+Free): AGY → V4 Flash → Pool Free
+     - Modo 3 (NIM Only): Nemotron 3.5 Super VL, rotación NIM C1→C9
+     - Modo 4 (AGY+Free): AGY → DeepSeek V4.1 Flash → Pool Free
      - Modo 5 (Free Light): Pool Free rotativo (Mistral, GLM, DashScope, Ollama)
-  3. **Genera el prompt optimizado** con bloque `.md` canónico que **comienza con la invocación** `/f-harness <modo>`, seguida del objetivo y reglas del usuario.
-  4. **Entrega** el prompt con ficha técnica y el comando listo para copiar/pegar en cualquier sesión harness.
+   3. **Genera el prompt optimizado** con bloque `.md` canónico que **comienza con la invocación** `/f-harness <modo>`, seguida del objetivo y reglas del usuario.
+   4. **Entrega** el prompt con ficha técnica y el comando listo para copiar/pegar en cualquier sesión harness.
+
+### Opción 8: 🔍 Modo Escaneo de APIs y Selección de Harness
+1. **Leer inventario de APIs**: parsea `AUDITORIA_APIS_COMPLETA_2026-10-20.md` (y su CSV) del workspace; extrae proveedor, endpoint, estado, latencia p50, TTFT, catálogo de entradas, modelo probado y cuota/tier.
+2. **Clasificar disponibilidad**: agrupa por estado — `OPERATIVA` (candidata), `SIN_VALOR` (sin credencial), `BLOQUEADA`/`403` (denegada), `INACCESIBLE` (sin red/DNS), `SIN_SALDO`/`402` (sin crédito), `CREDENCIAL_INVALIDA` (401).
+3. **Cruzar con rankings de inteligencia**: para cada proveedor/modelo operativo, consulta:
+   - `Artificial Analysis API` (`GET /api/v2/language/models/free`) → Intelligence Index, tokens/s, TTFT, precios input/output.
+   - `LMArena / Chatbot Arena` (dataset HF `lmarena-ai/leaderboard-dataset`) → Arena Score/Elo y CI.
+   - `OpenRouter` (`GET /api/v1/models`) → pricing, contexto, disponibilidad y sorts (intelligence/latency/throughput/price).
+4. **Capa de sentimiento técnico**: `last30days` + Reddit `.json`/PullPush + Hacker News Algolia con queries `<modelo> silent nerf | rate limit | 429 | best model | daily driver` (última semana/mes).
+5. **Construir registro enriquecido por modelo**: `{slug, proveedor, estado, elo/ia_index, tps, ttft_s, precio_in, precio_out, contexto, sentimiento, senales_nerf, menciones_rate_limit, fuente, fecha_consulta}`.
+6. **Recomendar modo de harness**: según la dificultad de la tarea y los modelos disponibles:
+   - Razonamiento profundo/arquitectura → Modo 1 (Full Power) o 6 (AGY Deep) con Nemotron/Gemini Pro. [Kimi K3 retirado: EOL 2026-10-15]
+   - Desarrollo diario → Modo 2 (Working Horse).
+   - Solo NIM → Modo 3 (NIM Only).
+   - Preservar cuota de pago → Modo 4 (AGY+Free).
+   - Tareas triviales/$0.00 → Modo 5 (Free Light) con modelos `:free` auditados.
+7. **Entrega**: bloque `.md` único con el inventario filtrado (solo OPERATIVA), tabla de rankings por modelo, recomendación de modo de harness (`/f-harness <N>`) y modelo óptimo, más ficha técnica y comando listo para ejecutar.
 
 ---
 

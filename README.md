@@ -1,27 +1,68 @@
-# FloydIA Autonomous Agent Skills Catalog (v28-MEM, rev. 2026-10-13)
+# ⚡ FloydIA Agent Skills Suite
 
 [![CI](https://github.com/floydiamarkv-byte/floydia-agent-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/floydiamarkv-byte/floydia-agent-skills/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Compatibility](https://img.shields.io/badge/AI%20Ecosystem-Antigravity%20%7C%20OpenCode%20%7C%20Hermes%20%7C%20Claude-06B6D4.svg)](#compatibilidad)
+[![Architecture](https://img.shields.io/badge/Protocolo-v27%20SSOT-10B981.svg)](#arquitectura)
 
-A production-grade, deterministic agentic skills ecosystem designed for autonomous coding environments, multi-model harnesses, homelab orchestration, and evidence-based verification.
+> **Suite Metodológica, Gobernanza SRE y Habilidades Agénticas de Alto Rendimiento para Google Antigravity, OpenCode, Claude Code y Hermes CLI.**
 
-## 🏛️ Architecture Overview
+La suite **FloydIA Agent Skills** reúne los protocolos y herramientas agénticas desarrollados por el ecosistema FloydIA. Diseñada bajo principios de **ingeniería de arneses (Harness Engineering)**, determinismo operativo y economía de tokens, esta suite permite que modelos de lenguaje actúen como ingenieros SRE, optimizadores de prompts y orquestadores multi-agente sin incurrir en bucles, alucinaciones o degradación de contexto.
 
-The FloydIA Agent OS organizes execution, verification, and governance into modular skills:
+---
 
-- **Governor & Routing**: `f-harness` v4 (unified: SRE operations + mode selector + workflow methodology, with `references/` progressive disclosure), `f-orquestador-floydia` (architect), `f-mejora-prompt`, `f-menu-prompts`.
-- **Deep Research & Intelligence**: `f-investiga` (two modes: deep dive + swarm, referencing the canonical `ENJAMBRE_5_MOTORES_SSOT`), `f-opti-notebooklm`.
-- **System Reliability Engineering (SRE)**: `f-master-update`, `f-evidence-engine`, `f-handon-handoff`, `f-check-environment`.
+## 📦 Catálogo de Skills
 
-> 2026-10-13 consolidation: merged `f-harness-select`/`f-harness-workflow` into `f-harness`; removed previously superseded skills (`f-router`, `f-harness-router`, `f-update-floydia`, `f-opti-floydia`) and archived ones (`f-policy-engine`, `f-audit-web`). Swarm engine definitions are SSOT-referenced, never embedded.
+| Skill | Comando / Trigger | Descripción |
+| :--- | :--- | :--- |
+| **`f-harness`** | `/f-harness`, `/harness` | **Centro de Control Unificado del Harness (v4.3)**: Routing de 11 motores, gestión de presupuesto atómico WAL, gobernanza OpenCode Go ($10/mo) y selector de modos. |
+| **`f-evidence-engine`** | `/f-evidence` | **Motor de Evidencia Determinista**: Certificación criptográfica SHA256, validación Playwright multi-contexto y verificación antes de afirmar. |
+| **`f-orquestador-floydia`** | `/f-orquestador` | **Orquestador Multi-Agente & Arquitectura**: Asume rol de Arquitecto Director, delegación algorítmica y diseño de software. |
+| **`f-mejora-prompt`** | `/f-mejora`, `/mejora` | **Optimizador Avanzado de Prompts v5.1**: Arquitectura Menu-First interactiva de 8 modos, calibración LRM y compilación quirúrgica. |
+| **`web-quality-audit`** | `/web-quality-audit` | **Auditoría Integral de Calidad Web**: Evaluación determinista Core Web Vitals (LCP/CLS), accesibilidad WCAG AAA y SEO técnico. |
+| **`f-handon-handoff`** | `/f-handoff`, `/f-handon` | **Continuidad Agéntica**: Persistencia de contexto en journals inmutables y traspaso de sesión sin pérdida de estado. |
+| **`f-master-update`** | `/f-master-update` | **Super Suite SRE**: Mantenimiento determinista del sistema operativo, memoria, agentes y sincronización NotebookLM. |
+| **`f-investiga`** | `/f-investiga` | **Investigación Profunda**: Modos Indagación (NotebookLM y vault) y Enjambre (consenso multi-modelo en paralelo). |
 
-## 🛡️ Security & Privacy
+---
 
-All skills adhere to the zero-leakage security contract:
-- Zero hardcoded API keys or credentials.
-- Fully portable relative paths and environment abstraction (${WORKSPACE_ROOT}).
-- Immutable append-only memory governance.
+## 🚀 Instalación y Uso
 
-## 📜 License
+### 1. Google Antigravity / Gemini CLI
+Clona o enlaza los skills dentro de tu directorio de configuración global o en tu workspace:
+```bash
+# Instalación a nivel de workspace
+mkdir -p .agents/skills
+cp -r skills/* .agents/skills/
 
-MIT License. Developed by FloydIA Systems.
+# O instalación a nivel de usuario
+mkdir -p ~/.gemini/config/skills/
+cp -r skills/* ~/.gemini/config/skills/
+```
+
+### 2. OpenCode
+```bash
+mkdir -p ~/.config/opencode/skills/
+cp -r skills/* ~/.config/opencode/skills/
+```
+
+### 3. Hermes CLI
+```bash
+mkdir -p ~/.hermes/skills/
+cp -r skills/* ~/.hermes/skills/
+```
+
+---
+
+## 🛡️ Seguridad y Privacidad
+
+- **100% Sanitizado**: Todos los skills han sido auditados exhaustivamente para garantizar que no contengan credenciales, tokens, contraseñas, direcciones IP privadas ni datos confidenciales.
+- **Variables Universales**: Rutas y endpoints se definen dinámicamente mediante variables de entorno estándar (`$WORKSPACE_ROOT`, `$HOME`, etc.).
+
+---
+
+## 📄 Licencia
+
+Distribuido bajo la Licencia **MIT**. Consulta el archivo [`LICENSE`](LICENSE) para más información.
+
+**Autor**: FloydIA ([floydiamarkv@gmail.com](mailto:floydiamarkv@gmail.com))

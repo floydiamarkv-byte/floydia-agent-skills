@@ -26,7 +26,7 @@ Al activarse el skill, el agente DEBE ejecutar estos pasos en orden:
 
 ### Paso 1 — Leer estado actual (verificación, no asunción)
 ```bash
-cat ${WORKSPACE}/SCRIPTS/harness_mode.json
+cat /home/tec/Dropbox/ANTIGRAVITY_PROJECTS/SCRIPTS/harness_mode.json
 ```
 (extraer `mode` y `mode_name`; si no existe, asumir modo 2 = default)
 
@@ -41,16 +41,18 @@ Modo actual: [N] <nombre>
 
 Responde con el número para cambiar de cadena de prioridades:
 
-1️⃣  Full Power       → Kimi K3 → AGY → V4 Flash → V4 Pro → Pool
+1️⃣  Full Power       → AGY Gemini 3.1 Pro → DeepSeek V4.1 Flash → Nemotron 3.5 Super VL → Nemotron 3 Ultra 550B → Codestral → MiniMax → Pool Free
                         (máxima potencia, mejor calidad)
-2️⃣  Working Horse    → Kimi K3 → V4 Flash → Pool Free
+2️⃣  Working Horse    → MiniMax M3.1 Flash → Codestral 2508 → Nemotron 3.5 Super VL → DeepSeek V4.1 Flash → Nemotron Lightning → Pool Free
                         (equilibrio recomendado — DEFAULT)
-3️⃣  Kimi Only        → solo Kimi K3 (rotación 4 cuentas NIM)
-                        (máximo Kimi, sin AGY)
-4️⃣  AGY + Free       → AGY → V4 Flash → Pool Free
-                        (ideal si Kimi está caído o lento hoy)
-5️⃣  Free Light       → Pool Free rotativo puro (NIM+OR+Zen)
+3️⃣  NIM Only         → Super VL → Ultra 550B → Nemotron Super → Lightning (rotación 4 cuentas NIM)
+                        (razonamiento denso sin AGY; sustituye al extinto Kimi Only)
+4️⃣  AGY + Free       → AGY Gemini 3.1 Pro → DeepSeek V4.1 Flash → Codestral 2508 → Cloudflare R1 Distill → Pool Free
+                        (ideal si el NIM está congestionado hoy)
+5️⃣  Free Light       → Pool Free rotativo puro (Lightning :free → Super :free Kilo → Ministral 8B)
                         (ultra austero, cuotas al límite)
+6️⃣  AGY Deep         → AGY Gemini 3.1 Pro → DeepSeek V4.1 Flash → Nemotron 3 Ultra 550B → Nemotron 3.5 Super VL → Pool Free
+                        (dirección reforzada)
 
 0️⃣  Salir sin cambios
 
@@ -61,18 +63,18 @@ Responde con el número para cambiar de cadena de prioridades:
 ```
 
 ### Paso 3 — Leer la selección del usuario
-Usar la herramienta de pregunta interactiva (`ask_user_question`) con las opciones 1–5 (0 = salir). NO asumir; el usuario elige.
+Usar la herramienta de pregunta interactiva (`ask_user_question`) con las opciones 1–6 (0 = salir). NO asumir; el usuario elige.
 
 ### Paso 4 — Aplicar la conmutación
-Si elige 1–5, ejecutar:
+Si elige 1–6, ejecutar:
 ```bash
-bash ${WORKSPACE}/SCRIPTS/harness_mode.sh <N> < /dev/null
+bash /home/tec/Dropbox/ANTIGRAVITY_PROJECTS/SCRIPTS/harness_mode.sh <N> < /dev/null
 ```
 
 ### Paso 5 — Verificación por evidencia (Protocolo v28)
 Nunca afirmar el cambio sin confirmarlo:
 ```bash
-cat ${WORKSPACE}/SCRIPTS/harness_mode.json
+cat /home/tec/Dropbox/ANTIGRAVITY_PROJECTS/SCRIPTS/harness_mode.json
 ```
 Presentar al usuario el resultado: modo nuevo, `mode_name` y `updated_at` literales del JSON.
 
@@ -82,11 +84,19 @@ Presentar al usuario el resultado: modo nuevo, `mode_name` y `updated_at` litera
 
 | Nº | Nombre | Cadena | Cuándo usarlo |
 |----|--------|--------|----------------|
-| 1 | `full_power` | Kimi K3 → AGY → V4 Flash → V4 Pro → Pool | Máxima potencia/calidad |
-| 2 | `working_horse` | Kimi K3 → V4 Flash → Pool Free | Equilibrio diario (DEFAULT) |
-| 3 | `kimi_only` | Solo Kimi K3 (rotación NIM 4 cuentas) | Máximo Kimi |
-| 4 | `agy_free` | AGY → V4 Flash → Pool Free | Kimi caído/lento ese día |
-| 5 | `free_light` | Pool Free rotativo | Cuotas al límite |
+| 1 | `full_power` | AGY → DeepSeek V4.1 Flash → Super VL → Ultra 550B → Codestral → MiniMax → Pool Free | Máxima potencia/calidad |
+| 2 | `working_horse` | MiniMax M3.1 Flash → Codestral → Super VL → DeepSeek V4.1 Flash → Lightning → Pool Free | Equilibrio diario (DEFAULT) |
+| 3 | `nim_only` | Super VL → Ultra 550B → Nemotron Super → Lightning (rotación NIM C1→C2→C7→C9) | Razonamiento denso sin AGY (sustituye al extinto `kimi_only`) |
+| 4 | `agy_free` | AGY → DeepSeek V4.1 Flash → Codestral → Cloudflare R1 Distill → Pool Free | NIM congestionado ese día |
+| 5 | `free_light` | Lightning :free → Super :free Kilo → Ministral 8B | Cuotas al límite |
+| 6 | `agy_deep` | AGY → DeepSeek V4.1 Flash → Ultra 550B → Super VL → Pool Free | Dirección reforzada |
+
+> **Reordenación 2026-10-21 (criterio: Elo de LMArena + capacidad local).** La cadena por tier se recalibró con el ranking externo, que sí distingue donde la medición local no podía (±15 pp de margen): `DeepSeek V4.1 Flash` (Elo 1474,6, IC [1468,1481]) y `MiniMax M3.1 Flash` (94 % de capacidad) van por delante de los Nemotron en los carriles de trabajo (`Ultra 550B` 1426,0 · `Super VL` 1415,9 — CI sin solapar con DeepSeek).
+> **AGY conserva la cabecera de `direccion`** por ser el **único motor con visión** (QA visual obligatorio, contrato 16), no por ranking.
+
+> **TOMBSTONE — Kimi K3 retirado (2026-10-15, `410 Gone` en NIM).** Ya no es ningún motor de la cadena.
+> Sustitutos verificados: `nvidia/nemotron-3-ultra-550b-a55b` (C4, deliberación) y `nvidia/nemotron-3.5-super-vl-120b-a12b` (C1/C5, sincrónico).
+> La API directa de Moonshot (`C7_KIMI_PLATFORM_API`) es **de pago** (saldo $1,65) y queda **fuera del harness por decisión del operador** (2026-09-29): solo a mano, con `--break-glass` o petición explícita.
 
 ---
 

@@ -43,6 +43,13 @@ Selecciona una acción respondiendo con el número correspondiente:
      Compilación AST, Enjambre Anclado con Citas (`--swarm --file`), y Registro Append-Only
      (`python3 SCRIPTS/run_harness_verification.py`).
 
+7️⃣ 🔬 **Escaneo de APIs + Ranking de Inteligencia + Redefinición del Harness**
+   ↳ Barrido empírico del `.env` (AUTH/LIVE, $0.00), cruce con Artificial Analysis
+     + LMArena + OpenRouter + LiteLLM + models.dev, scoring ponderado F3 y PROPUESTA
+     de cadena por tier. NUNCA auto-aplica: emite propuesta y exige confirmación
+     humana (`python3 SCRIPTS/harness_api_scan.py --scan --rank --propose`).
+     Detalle operativo: `references/api-scan.md`.
+
 0️⃣ 🚪 **Salir**
 ```
 
@@ -52,15 +59,19 @@ Selecciona una acción respondiendo con el número correspondiente:
 
 El harness NUNCA hace fallback "a ciegas". Clasifica la tarea y entra por su tier; solo desciende dentro de la cadena si el motor elegido falla.
 
-| Tier | Criterio de Entrada | Cadena de Motores (en orden) |
+| Tier | Criterio de Entrada | Cadena de Motores (en orden, derivado de `harness_mode.json` v4, recalibrado 2026-10-21) |
 |---|---|---|
-| **direccion** (duda/consenso) | Ambigüedad o arbitraje de arquitectura | `Union Alpha` (or_free) ➔ si falla, pool flash |
-| **razonamiento** | Tarea compleja / lógica profunda / LRM | `BlueMind Nemotron Nano` (~3 s) ➔ `Kimi K3` NIM (240 s) |
-| **medio** | Código estándar / refactor / análisis | `EvoLink GPT-5.1` ➔ `ZenMux GLM-5.3-FlashX` (35 s) |
-| **flash** (default) | Trivial / chat / formato / consultas rápidas | `Mistral Ministral 3B` ×6 ➔ `Z.AI GLM 4.5 Flash` ×6 ➔ `Gemini 3.1 Flash Lite` ➔ `CF GLM 4.7 Flash` ➔ `Pool Free` (OR :free) |
+| **direccion** (duda/consenso) | Ambigüedad o arbitraje de arquitectura | `AGY Gemini 3.1 Pro` (p50 39.1 s / p95 91 s, Elo 1486,9 👁️) ➔ `DeepSeek V4.1 Flash` (1112/2000, Elo 1474,6) ➔ `Nemotron 3.5 Super VL 120B` NIM (351/500, Elo 1415,9 👁️) |
+| **razonamiento** | Tarea compleja / lógica profunda / LRM | `DeepSeek V4.1 Flash` (1112/2000, Elo 1474,6) ➔ `Nemotron 3 Ultra 550B` NIM (684/1200, Elo 1426,0) ➔ `Cloudflare R1 Distill 32B` (474/800) |
+| **medio** | Código estándar / refactor / análisis | `MiniMax M3.1 Flash` (1050/1800, cap 94 %) ➔ `Mistral Codestral 2508` (430/900) ➔ `Nemotron 3.5 Super VL 120B` (351/600) ➔ `DeepSeek V4.1 Flash` (1112/2000) ➔ `Nemotron Super` (716/2000) ➔ `North Mini Code` (383/600) ➔ `Laguna S 2.1` (3297) |
+| **flash** (default) | Trivial / chat / formato / consultas rápidas | `Nemotron 3.5 Lightning 30B` NIM (191/350, Elo 1351,3) ➔ `Ministral 8B` (532/900) ➔ `Nemotron 3.5 Lightning :free` OR (228/400) ➔ `Nemotron Super :free` Kilo (847) |
 
 > [!NOTE]
-> **Vault (nunca automático)**: Kimi directo y OpenRouter C9 únicamente con `--break-glass` o solicitud explícita del usuario.
+> **Vault (nunca automático)**: Kimi directo (Moonshot, **de pago**) y OpenRouter C9 únicamente con `--break-glass` o solicitud explícita del usuario.
+> **Kimi K3 (NIM) está RETIRADO** (`410 Gone`, EOL 2026-10-15): no figura en ninguna cadena. Sustitutos verificados: `nemotron-3-ultra-550b-a55b` (razonamiento) y `nemotron-3.5-super-vl-120b-a12b` (sincrónico).
+
+> [!IMPORTANT]
+> **Criterio de ordenación (2026-10-21)**: el orden **NO** es un ranking de calidad. Es intención de *fallback* dentro de cada carril: el dispatcher coge el **primero del carril cuyo p95 no supere el techo**, y si todos lo superan, baja de carril. La posición se recalibró con el **Elo de LMArena** (que sí distingue, con IC 95 % sin solapar) porque la medición local de capacidad (11 tareas, n=22, ±15 pp) no podía separar Super VL (92 %), DeepSeek V4.1 (93 %) y MiniMax M3.1 (94 %). `AGY` mantiene la cabecera de `direccion` por ser el **único con visión**, no por ranking.
 
 ---
 
@@ -101,8 +112,10 @@ El harness NUNCA hace fallback "a ciegas". Clasifica la tarea y entra por su tie
 | `SCRIPTS/providers_registry.json` | Proveedores, base_urls, keys_env, cuotas | Manual con validación JSON |
 | `SCRIPTS/harness_dispatch.py` | Dispatcher y motor de inferencia | Python compilado con `py_compile` |
 | `SCRIPTS/harness_doctor.py` | Validador sintáctico, tombstones y DSH dump | Ejecución pasiva ($0.00) |
+| `SCRIPTS/harness_api_scan.py` | Orquestador escaneo+rank+propuesta de cadena (R1, no auto-aplica) | Python compilado con `py_compile` |
 | `SCRIPTS/pool_call.py` | Invocador pool con rotación LRU y cooldowns | Respetar presupuesto Cloudflare |
 | `SCRIPTS/pool_telemetry.py` | Estado por cuenta y neuronas Cloudflare | Solo lectura de métricas |
+| `SCRIPTS/env_loader.py` | **Parser canónico del `.env`** (comentarios inline `# endpoint:`) | Prohibido reintroducir `split("=", 1)` |
 | `~/.dsh/settings.yaml` | Configuración bare-metal de DeepSeek Harness | Sustitución de IDs; nunca sed suelto |
 
 ---
@@ -118,13 +131,13 @@ El harness NUNCA hace fallback "a ciegas". Clasifica la tarea y entra por su tie
 
 ## 🔬 6. Definición de Motores Post-Escaneo de APIs (Consulta Externa + Enjambre)
 
-> **Cuándo**: tras un escaneo preliminar de APIs (`f-api-scan-harness` / sondas pasivas) que confirme claves vivas, NO se define el orden de motores por intuición. Se ejecuta este protocolo de **triple contraste**.
+> **Cuándo**: tras un escaneo preliminar de APIs (`references/api-scan.md` / sondas pasivas) que confirme claves vivas, NO se define el orden de motores por intuición. Se ejecuta este protocolo de **triple contraste**.
 
 ### 6.1 Flujo obligatorio
 1. **Inventario local verificado**: proveedores/rotación desde `opencode.jsonc` + `/health` del proxy `:8088` + `SCRIPTS/providers_registry.json`. (Hoy: los 5 motores principales van por **NVIDIA NIM** vía proxy multi-cuenta `127.0.0.1:8088` — buckets C1/C2/C7/C9).
 2. **Consulta externa deliberada**: enseñar a una IA externa (chat web Libre, humano en el bucle) el inventario y pedirle orden de inteligencia mayor→menor + capacidades exactas, usando el prompt 6.2.
 3. **Enjambre propio**: mientras tanto, lanzar subagentes paralelos con webfetch a fuentes primarias (fichas NVIDIA/HF, leaderboards verificables: Artificial Analysis Intelligence Index, LMArena) y registrar citas URL+fecha.
-4. **Cotejo de 3 vías**: local vs externa vs enjambre. Registrar disonancias (ej.: LMArena solo lista a Kimi K3; AA II sitúa Ultra > K3). La cadena final se fija por **evidencia + coste $0.00 + latencia medida**, no por un solo ranking.
+4. **Cotejo de 3 vías**: local vs externa vs enjambre. Registrar disonancias (ej.: LMArena solo lista a los modelos con(style control) activo; AA II sitúa `nemotron-3-ultra-550b` por encima de `nemotron-3-super-120b`). La cadena final se fija por **evidencia + coste $0.00 + latencia medida**, no por un solo ranking.
 5. **Persistencia**: ranking y decisiones a `memory-bank/journal/` (append-only) y, si cambia el orden, editar `SCRIPTS/harness_mode.json` SOLO vía `harness_chain.py`.
 
 ### 6.2 Prompt canónico para IA externa (copiar/pegar tal cual, sustituir `[INVENTARIO]`)
@@ -148,10 +161,34 @@ Te pido, con citas verificables (URL + fuente):
 Responde en español, tablas preferidas. Marca como NO VERIFICADO lo que no tengas con fuente.
 ```
 
-### 6.3 Semilla verificada 2026-10-12 (enjambre propio + 7 IAs externas cotejadas)
-Orden inteligencia consensuado (Artificial Analysis Intelligence Index **v4.3.2** — NUNCA mezclar versiones del índice; los "48/36" de prensa/aggregadores son v4.1 y están rebasados):
-**1. Kimi K3 (II=44, LMArena #9 Elo 1486 + #1 WebDev 1679) → 2. DeepSeek V4.1 Flash (II=39, Terminal-Bench rey 90.6) → 3. Nemotron 3 Ultra 550B (II=23) → 4. Nemotron 3 Super 120B (II=12.8) → 5. Nemotron 3 Nano Omni 30B (II≈10 estimado, sub-agente de percepción, no generalista)**.
-Reparto por dominio (accionable para tiers): K3 gana razonamiento/ciencia/legal (HLE 46.9, GPQA 93.5, BrowseComp 91.2) → tier **razonamiento**; V4.1 Flash gana agéntico/terminal (Terminal-Bench 4.0 26.8 vs 12.6; Automation 68.9%) → tier **medio/agéntico**; **flash**: Nano Omni (latencia mínima + omni) o V4.1 Flash con reasoning effort=1.
-Trampas operativas verificadas: (a) `reasoning_effort` de K3 en NIM por defecto es **max** → fijar `low` en tiers no-expertos; (b) ctx 1M de Ultra/Super requiere enablement — en NIM servido a 262k (coincide con opencode.jsonc); (c) parámetros ≠ inteligencia (Ultra 55B activos < V4.1 8-16B en II); (d) latencias citadas son de proveedores comerciales, NIM free ~40 RPM: medir TTFT propio.
-Persistencia del poll: 7 respuestas externas en `${HOME}/Descargas/ww/` + enjambre propio; consenso 6/7 en K3#1, disidente duck.ai (Super#2).
+### 6.3 Semilla vigente 2026-10-20 (enjambre propio + 7 IAs externas cotejadas + medición local)
+> **TOMBSTONE**: la semilla 2026-10-12 quedaba headed por `Kimi K3` (II=44). Kimi K3 está **EOL** (`410 Gone` en NIM, 2026-10-15) y **ya no es candidato**. La semilla se recalibra sin él.
+
+**Orden por Artificial Analysis Intelligence Index v4.3.2** (NUNCA mezclar versiones del índice; los "48/36" de prensa/aggregadores son v4.1 y están rebasados). Solo se listan valores **verificados en fuente**:
+
+| # | Modelo | AA II (v4.3.2) | LMArena | Estado |
+|---|---|---:|---|---|
+| 1 | `deepseek-ai/deepseek-v4.1-flash` | **39** | — | VERIFICADO · Terminal-Bench rey 90.6 |
+| 2 | `nvidia/nemotron-3-ultra-550b-a55b` | **23** | — | VERIFICADO · 550B MoE (55B activos) |
+| 3 | `nvidia/nemotron-3-super-120b-a12b` | **12.8** | — | VERIFICADO |
+| — | `nvidia/nemotron-3-nano-omni-30b-a3b` | ~10 (estimado) | — | NO VERIFICADO en fuente · sub-agente de percepción, no generalista |
+
+> **Sin AA II verificable en las fuentes cargadas** (no inventar valores): `MiniMax M3.1 Flash`, `Mistral Codestral 2508`, `@cf/deepseek-ai/deepseek-r1-distill-qwen-32b`, `cohere/north-mini-code:free`, `nvidia/nemotron-3.5-lightning-30b-a3b`, `nvidia/nemotron-3.5-super-vl-120b-a12b`. Para estos, la evidencia disponible es **medición local** (`harness_mode.json`: capacidad % + p50/p95).
+
+**Reparto por dominio (accionable para tiers)**: `nemotron-3-ultra-550b` → tier **razonamiento** (550B MoE, 684 ms p50 medidos) · `deepseek-v4.1-flash` → tier **medio/agéntico** (Terminal-Bench 4.0 26.8 vs 12.6; Automation 68.9%) · **flash**: `nemotron-3.5-lightning-30b` (191 ms p50, el más rápido de la flota) o `deepseek-v4.1-flash` con `reasoning_effort=1` · **dirección**: `AGY Gemini 3.1 Pro` (único con visión nativa, p50 39.1 s) · `nemotron-3.5-super-vl-120b` como respaldo multimodal.
+
+**Trampas operativas verificadas**: (a) `reasoning_effort` por defecto `max` en razonadores de NIM → fijar `low` en tiers no-expertos; (b) ctx 1M de Ultra/Super requiere enablement — en NIM servido a 262k (coincide con `opencode.jsonc`); (c) **parámetros ≠ inteligencia** (Ultra 55B activos < V4.1 8–16B en II); (d) las latencias de fuentes externas son de proveedores comerciales: NIM free ~40 RPM → **medir TTFT propio**; (e) el **catálogo miente por omisión**: un modelo listado puede estar muerto al servir (`deepseek-v4-pro` 410) y viceversa → validar con `model_catalog_scan.py` + canario de 1 llamada.
+
+**Precedente de medición propia que corrige al ranking externo** (batería propia `bench_battery.py`, 2026-10-04, `reps=2`, **provisional** — n=2 no decide): `deepseek-reasoner` **90/100** (~1,6 s) · `nemotron-super` 78/100 (~1,3 s) · `kimi-k3` 75/100 (2–14 s), con McNemar pareado `deepseek` 3 discordantes / `kimi` 0. → **Regla de oro: el ranking externo NUNCA compensa un fallo propio; la medición propia pesa ≥55 % del score.**
+
+**Persistencia del poll**: 7 respuestas externas en `/home/tec/Descargas/ww/` + enjambre propio; consenso 6/7 en la cabecera de la semilla 2026-10-12 (mayoría Kimi, hoy irrelevante por EOL) y disidente `duck.ai` (Super#2).
+
+### 6.4 Mandato de Cobertura de APIs en Auditorías (Lección Inmutable 2026-10-19)
+En toda auditoría de APIs, benchmarking o redefinición del arnés (`f-harness`, `scan_apis_*`, `eval_*`):
+1. **NVIDIA NIM**: Es **OBLIGATORIO** probar activamente las 4 cuentas (`C1_NVIDIA`, `C2_NVIDIA`, `C7_NVIDIA`, `C9_NVIDIA_API`) y el proxy local `http://127.0.0.1:8088/v1/models` y `/chat/completions` (`deepseek-ai/deepseek-v4.1-flash`, `nemotron-3.5-lightning`, `nemotron-3.5-super-vl`, `nemotron-3-ultra-550b`).
+2. **OpenRouter C7 Privileged Free Tier & Pool**: Es **OBLIGATORIO** auditar el catálogo de modelos `:free` de OpenRouter distinguiendo:
+   - **`C7_OPENROUTER`**: Cuenta fondeada con cuota privilegiada de **1.000 req/día** para modelos `:free` protegida por el cortafuegos `c7_free_client.py` a $0.00.
+   - **`C1_OPENROUTER` a `C6_OPENROUTER`**: Cuentas libres rotativas (50 req/día cada una).
+3. **Prohibición Estricta**: Queda TERMINANTEMENTE PROHIBIDO excluir NVIDIA NIM u OpenRouter C7 bajo la asunción de que "ya se conocen" o "corren en segundo plano". Toda auditoría debe emitir evidencia empírica verificada de ambos.
+
 
